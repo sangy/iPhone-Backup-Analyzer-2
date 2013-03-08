@@ -703,8 +703,8 @@ class IPBA2(QtGui.QMainWindow):
 			headerString = ""
 			headerString += '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"\n'
 			headerString += '"http://www.w3.org/TR/html4/loose.dtd">\n'
-			headerString += '<html><head><title>WhatsAppBrowser</title>\n'
-			headerString += '<meta name="GENERATOR" content="iPBA WhatsApp Browser">\n'
+			headerString += '<html><head><title>iPhone Backup Analyzer Report</title>\n'
+			headerString += '<meta name="GENERATOR" content="iPBA">\n'
 			# adds page style
 			headerString += html_util.css_style
 			# adds javascript to make the tables sortable
