@@ -50,28 +50,28 @@ class ViBrowserWidget(QtGui.QWidget):
 	
 	def __init__(self, cursor, path, daemon = False):
 		QtGui.QWidget.__init__(self)
-                
-                self.ui = Ui_ViberBrowser()
-                self.ui.setupUi(self)
-                
-                self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-                
-                self.cursor = cursor
-                self.backup_path = path
-                
-                self.fname_contacts = os.path.join(self.backup_path, plugins_utils.realFileName(self.cursor, filename="Contacts.data", domaintype="AppDomain"))
+		
+		self.ui = Ui_ViberBrowser()
+		self.ui.setupUi(self)
+		
+		self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+		
+		self.cursor = cursor
+		self.backup_path = path
+		
+		self.fname_contacts = os.path.join(self.backup_path, plugins_utils.realFileName(self.cursor, filename="Contacts.data", domaintype="AppDomain"))
 
-                # check if files exist
-                if (not os.path.isfile(self.fname_contacts)):
-                        raise Exception("Viber database not found: \"%s\""%self.fname_chatstorage)
-                
-                if (daemon == False):
-                        self.populateUI()
+		# check if files exist
+		if (not os.path.isfile(self.fname_contacts)):
+			raise Exception("Viber database not found: \"%s\""%self.fname_chatstorage)
+		
+		if (daemon == False):
+			self.populateUI()
 
-                        # signal-slot chats/msgs connection
-                        QtCore.QObject.connect(self.ui.chatsWidget, QtCore.SIGNAL("itemSelectionChanged()"), self.onChatsClick)
-                        self.ui.chatsWidget.setColumnHidden(0,True)
-                        self.ui.msgsWidget.setColumnHidden(0,True)
+			# signal-slot chats/msgs connection
+			QtCore.QObject.connect(self.ui.chatsWidget, QtCore.SIGNAL("itemSelectionChanged()"), self.onChatsClick)
+			self.ui.chatsWidget.setColumnHidden(0,True)
+			self.ui.msgsWidget.setColumnHidden(0,True)
 
 			# signal-slot connection: right click context menu on contacts table
 			self.ui.contactsWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
@@ -107,9 +107,9 @@ class ViBrowserWidget(QtGui.QWidget):
 				newItem = QtGui.QTableWidgetItem()
 				nameStr = ""
 				if contact.ZPREFIXNAME is not None:
-                                        nameStr += contact.ZPREFIXNAME + " "
+					nameStr += contact.ZPREFIXNAME + " "
 				if contact.ZMAINNAME is not None:
-                                        nameStr += contact.ZMAINNAME
+					nameStr += contact.ZMAINNAME
 				newItem.setData(QtCore.Qt.DisplayRole,nameStr)
 				self.ui.contactsWidget.setItem(row, 0, newItem)
 			if hasattr(contact, 'ZCANONIZEDPHONENUM'):                                         
@@ -117,13 +117,13 @@ class ViBrowserWidget(QtGui.QWidget):
 				self.ui.contactsWidget.setItem(row, 1, newItem)                                       
 			if hasattr(contact, 'ZREGISTRATIONDATE'):                                        
 				newItem = QtGui.QTableWidgetItem()
-                                if contact.ZREGISTRATIONDATE is not None:
-                                        newItem.setData(QtCore.Qt.DisplayRole,str(self.formatDate(contact.ZREGISTRATIONDATE)))
+				if contact.ZREGISTRATIONDATE is not None:
+					newItem.setData(QtCore.Qt.DisplayRole,str(self.formatDate(contact.ZREGISTRATIONDATE)))
 				self.ui.contactsWidget.setItem(row, 2, newItem)                                     
 			if hasattr(contact, 'ZMODIFCATIONDATE'):                                        
 				newItem = QtGui.QTableWidgetItem()
-                                if contact.ZMODIFCATIONDATE is not None:
-                                        newItem.setData(QtCore.Qt.DisplayRole,str(self.formatDate(contact.ZMODIFCATIONDATE)))
+				if contact.ZMODIFCATIONDATE is not None:
+					newItem.setData(QtCore.Qt.DisplayRole,str(self.formatDate(contact.ZMODIFCATIONDATE)))
 				self.ui.contactsWidget.setItem(row, 3, newItem)
 			if hasattr(contact, 'ZISVIBERICON') and hasattr(contact, 'ZICONID'):    			
 				newItem = QtGui.QTableWidgetItem()
@@ -131,22 +131,22 @@ class ViBrowserWidget(QtGui.QWidget):
 				iconRealFilename = ""
 				iconlocalfile = ""
 				if contact.ZISVIBERICON is 1 and contact.ZICONID is not None:
-                                        iconlocalfile = contact.ZICONID + ".jpg"
-                                        iconRealFilename = os.path.join(self.backup_path,
-                                                                        plugins_utils.realFileName(self.cursor,
-                                                                                                   filename=iconlocalfile,
-                                                                                                   domaintype="AppDomain"))
-                                        # add a thumnail to the table view
-                                        icon = QtGui.QIcon(iconRealFilename)
-                                        newItem.setIcon(icon)
-                                
-                                        # add info for attachment export (ctx menu)
-                                        newItem.setData(QtCore.Qt.UserRole, iconRealFilename)
-                                        newItem.setData(QtCore.Qt.UserRole+1, iconlocalfile)
-                                        
-                                        self.ui.contactsWidget.setItem(row, 4, newItem)
+					iconlocalfile = contact.ZICONID + ".jpg"
+					iconRealFilename = os.path.join(self.backup_path,
+									plugins_utils.realFileName(self.cursor,
+												   filename=iconlocalfile,
+												   domaintype="AppDomain"))
+					# add a thumnail to the table view
+					icon = QtGui.QIcon(iconRealFilename)
+					newItem.setIcon(icon)
+				
+					# add info for attachment export (ctx menu)
+					newItem.setData(QtCore.Qt.UserRole, iconRealFilename)
+					newItem.setData(QtCore.Qt.UserRole+1, iconlocalfile)
+					
+					self.ui.contactsWidget.setItem(row, 4, newItem)
 
-                        self.ui.contactsWidget.setRowHeight(row, 80)
+			self.ui.contactsWidget.setRowHeight(row, 80)
 			row = row + 1
 	
 		self.ui.contactsWidget.setSortingEnabled(True)
@@ -170,15 +170,15 @@ class ViBrowserWidget(QtGui.QWidget):
 				newItem = QtGui.QTableWidgetItem()
 				nameStr = ""
 				if call.ZPREFIXNAME is not None:
-                                        nameStr += call.ZPREFIXNAME + " "
+					nameStr += call.ZPREFIXNAME + " "
 				if call.ZMAINNAME is not None:
-                                        nameStr += call.ZMAINNAME
+					nameStr += call.ZMAINNAME
 				newItem.setData(QtCore.Qt.DisplayRole,nameStr)
 				self.ui.callsWidget.setItem(row, 0, newItem)                                    
 			if hasattr(call, 'ZDATE'):                                        
 				newItem = QtGui.QTableWidgetItem()
-                                if call.ZDATE is not None:
-                                        newItem.setData(QtCore.Qt.DisplayRole,str(self.formatDate(call.ZDATE)))
+				if call.ZDATE is not None:
+					newItem.setData(QtCore.Qt.DisplayRole,str(self.formatDate(call.ZDATE)))
 				self.ui.callsWidget.setItem(row, 1, newItem)                                     
 			if hasattr(call, 'ZDURATION'):
 				newItem = QtGui.QTableWidgetItem()
@@ -224,9 +224,9 @@ class ViBrowserWidget(QtGui.QWidget):
 				newItem = QtGui.QTableWidgetItem()
 				nameStr = ""
 				if chat.ZPREFIXNAME is not None:
-                                        nameStr += chat.ZPREFIXNAME + " "
+					nameStr += chat.ZPREFIXNAME + " "
 				if chat.ZMAINNAME is not None:
-                                        nameStr += chat.ZMAINNAME
+					nameStr += chat.ZMAINNAME
 				newItem.setData(QtCore.Qt.DisplayRole,nameStr)
 				self.ui.chatsWidget.setItem(row, 1, newItem) 
 			if hasattr(chat, 'ZNAME'):                                         
@@ -273,9 +273,9 @@ class ViBrowserWidget(QtGui.QWidget):
 	'''
 	def getContacts(self):
 
-                # opening database
+		# opening database
 		try:          
-                        self.tempdb = sqlite3.connect(self.fname_contacts)
+			self.tempdb = sqlite3.connect(self.fname_contacts)
 		except:
 			print("\nUnexpected error: %s"%sys.exc_info()[1])
 			self.close()
@@ -305,9 +305,9 @@ class ViBrowserWidget(QtGui.QWidget):
 	'''
 	def getCalls(self):
 
-                # opening database
+		# opening database
 		try:          
-                        self.tempdb = sqlite3.connect(self.fname_contacts)
+			self.tempdb = sqlite3.connect(self.fname_contacts)
 		except:
 			print("\nUnexpected error: %s"%sys.exc_info()[1])
 			self.close()
@@ -337,7 +337,7 @@ class ViBrowserWidget(QtGui.QWidget):
 	'''
 	def getChats(self):
 
-                # opening database
+		# opening database
 		try:    
 			self.tempdb = sqlite3.connect(self.fname_contacts)
 		except:
@@ -373,7 +373,7 @@ class ViBrowserWidget(QtGui.QWidget):
 		#(the selected row is highligthed and the chats table appears disabled)
 		QtGui.QApplication.processEvents()
 
-                # opening database
+		# opening database
 		try:    
 			self.tempdb = sqlite3.connect(self.fname_contacts)
 		except:
@@ -433,7 +433,7 @@ class ViBrowserWidget(QtGui.QWidget):
 	'''
 	def getMsgContact(self, zpk):
 
-                # opening database
+		# opening database
 		try:    
 			self.tempdb = sqlite3.connect(self.fname_contacts)
 		except:
@@ -464,7 +464,7 @@ class ViBrowserWidget(QtGui.QWidget):
 	'''
 	def getLocation(self, zpk):
 
-                # opening database
+		# opening database
 		try:    
 			self.tempdb = sqlite3.connect(self.fname_contacts)
 		except:
@@ -492,7 +492,7 @@ class ViBrowserWidget(QtGui.QWidget):
 	'''
 	def getMediaItem(self, zpk):
 
-                # opening database
+		# opening database
 		try:    
 			self.tempdb = sqlite3.connect(self.fname_contacts)
 		except:
@@ -520,7 +520,7 @@ class ViBrowserWidget(QtGui.QWidget):
 	########################################################################        
 
 	def onChatsClick(self):
-                
+		
 		# disable chats table (to disable click events while processing)
 		self.ui.chatsWidget.setEnabled(False)
 		
@@ -549,7 +549,7 @@ class ViBrowserWidget(QtGui.QWidget):
 		row = 0		
 		for msg in msgs:
 
-                        from_me = False # var to remember from whom is the msg
+			from_me = False # var to remember from whom is the msg
 	
 			if hasattr(msg, 'Z_PK'):                                         
 				newItem = QtGui.QTableWidgetItem()
@@ -558,20 +558,20 @@ class ViBrowserWidget(QtGui.QWidget):
 			if hasattr(msg, 'ZPHONENUMINDEX'):
 				newItem = QtGui.QTableWidgetItem()
 				fromstring = ""
-                                if msg.ZPHONENUMINDEX is not None:
+				if msg.ZPHONENUMINDEX is not None:
 					msgcontact = self.getMsgContact(msg.ZPHONENUMINDEX)
 					if msgcontact is not None:
-                                                if msgcontact.ZPREFIXNAME is not None:
-                                                        fromstring += msgcontact.ZPREFIXNAME + " "
-                                                if msgcontact.ZMAINNAME is not None:
-                                                        fromstring += msgcontact.ZMAINNAME + " "
-                                                if msgcontact.ZCANONIZEDPHONENUM is not None:
-                                                        fromstring += msgcontact.ZCANONIZEDPHONENUM
+						if msgcontact.ZPREFIXNAME is not None:
+							fromstring += msgcontact.ZPREFIXNAME + " "
+						if msgcontact.ZMAINNAME is not None:
+							fromstring += msgcontact.ZMAINNAME + " "
+						if msgcontact.ZCANONIZEDPHONENUM is not None:
+							fromstring += msgcontact.ZCANONIZEDPHONENUM
 					else:
 						fromstring = "N/A"
-                                else:
-                                        fromstring = "Me"
-                                        from_me = True
+				else:
+					fromstring = "Me"
+					from_me = True
 				newItem.setData(QtCore.Qt.DisplayRole,fromstring)
 				self.ui.msgsWidget.setItem(row, 1, newItem)
 			if hasattr(msg, 'ZDATE'):    
@@ -590,14 +590,14 @@ class ViBrowserWidget(QtGui.QWidget):
 			# ATTACHMENTS SECTION
 						
 			if hasattr(msg, 'ZATTACHMENT') and hasattr(msg, 'ZLOCATION'):
-                                
+				
 				mediaItem = QtGui.QTableWidgetItem("")
 
 				msgcontent = ""
 
 				# case 1: msg contains a location
 				if msg.ZLOCATION is not None:
-                                        location = self.getLocation(msg.ZLOCATION)
+					location = self.getLocation(msg.ZLOCATION)
 					msgcontent += "GPS\n" + "lat:  " + str(location.ZLATITUDE) + "\nlong: " + str(location.ZLONGITUDE) + "\naddress:  " + unicode(location.ZADDRESS) + "\n"
 
 					# re-set message content (3rd column)
@@ -615,43 +615,43 @@ class ViBrowserWidget(QtGui.QWidget):
 					filename = strlat_s[0] + "." + (strlat_s[1])[:6] + "_" + strlong_s[0] + ".jpg"
 
 					locationlocalfile = filename
-                                        locationRealFilename = os.path.join(self.backup_path,
-                                                                            plugins_utils.realFileName(self.cursor,
-                                                                                                       filename=locationlocalfile,
-                                                                                                       domaintype="AppDomain"))
-                                        # add a thumbnail to the table view
-                                        icon = QtGui.QIcon(locationRealFilename)
-                                        mediaItem.setIcon(icon)
-                                
-                                        # add info for attachment export (ctx menu)
+					locationRealFilename = os.path.join(self.backup_path,
+									    plugins_utils.realFileName(self.cursor,
+												       filename=locationlocalfile,
+												       domaintype="AppDomain"))
+					# add a thumbnail to the table view
+					icon = QtGui.QIcon(locationRealFilename)
+					mediaItem.setIcon(icon)
+				
+					# add info for attachment export (ctx menu)
 					mediaItem.setData(QtCore.Qt.UserRole+2, location.ZLATITUDE)
 					mediaItem.setData(QtCore.Qt.UserRole+3, location.ZLONGITUDE)
-                                        
+					
 
-                                # case 2: msg contains an attachment
+				# case 2: msg contains an attachment
 				elif msg.ZATTACHMENT is not None:
 					media = self.getMediaItem(msg.ZATTACHMENT)
 					msgcontent += "ATTACHMENT\n" + "type:  " + str(media.ZTYPE) + "\nstate: " + str(media.ZSTATE) + "\nsize: " + str(media.ZFILESIZE) + "B\n"
 					if 'sticker' in media.ZTYPE:
-                                                msgcontent += "id: " + media.ZID + "\n"
+						msgcontent += "id: " + media.ZID + "\n"
 
 					# re-set message content (3rd column)
 					newItem = QtGui.QTableWidgetItem(msgcontent)
 					self.ui.msgsWidget.setItem(row, 3, newItem)
 
 					if media.ZNAME:
-                                                medialocalfile = media.ZNAME
-                                                mediaRealFilename = os.path.join(self.backup_path,
-                                                                                 plugins_utils.realFileName(self.cursor,
-                                                                                                            filename=medialocalfile,
-                                                                                                            domaintype="AppDomain"))
-                                                # add a thumbnail to the table view
-                                                icon = QtGui.QIcon(mediaRealFilename)
-                                                mediaItem.setIcon(icon)
-                                        
-                                                # add info for attachment export (ctx menu)
-                                                mediaItem.setData(QtCore.Qt.UserRole, mediaRealFilename)
-                                                mediaItem.setData(QtCore.Qt.UserRole+1, medialocalfile)
+						medialocalfile = media.ZNAME
+						mediaRealFilename = os.path.join(self.backup_path,
+										 plugins_utils.realFileName(self.cursor,
+													    filename=medialocalfile,
+													    domaintype="AppDomain"))
+						# add a thumbnail to the table view
+						icon = QtGui.QIcon(mediaRealFilename)
+						mediaItem.setIcon(icon)
+					
+						# add info for attachment export (ctx menu)
+						mediaItem.setData(QtCore.Qt.UserRole, mediaRealFilename)
+						mediaItem.setData(QtCore.Qt.UserRole+1, medialocalfile)
 					
 				self.ui.msgsWidget.setItem(row, 4, mediaItem)                                                
 
@@ -666,8 +666,8 @@ class ViBrowserWidget(QtGui.QWidget):
 		self.ui.msgsWidget.resizeColumnsToContents()
 		self.ui.msgsWidget.setColumnWidth(6, 150)	
 		self.ui.msgsWidget.resizeRowsToContents()
-                # signal-slot connection: preserve row height when sorting messages
-                self.ui.msgsWidget.horizontalHeader().sortIndicatorChanged.connect(self.ui.msgsWidget.resizeRowsToContents)
+		# signal-slot connection: preserve row height when sorting messages
+		self.ui.msgsWidget.horizontalHeader().sortIndicatorChanged.connect(self.ui.msgsWidget.resizeRowsToContents)
 		
 		# re-enable chats table
 		self.ui.chatsWidget.setEnabled(True)
@@ -716,11 +716,11 @@ class ViBrowserWidget(QtGui.QWidget):
 		
 	
 	def ctxMenuContacts(self, pos):
-                
+		
 		cell = self.ui.contactsWidget.itemAt(pos)
 		if cell is not None:
-                        self.link = cell.data(QtCore.Qt.UserRole) 
-                        self.name = cell.data(QtCore.Qt.UserRole + 1)
+			self.link = cell.data(QtCore.Qt.UserRole) 
+			self.name = cell.data(QtCore.Qt.UserRole + 1)
 		
 		menu =  QtGui.QMenu()
 		action1 = QtGui.QAction("Export table CSV", self)
